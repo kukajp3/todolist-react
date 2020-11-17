@@ -1,19 +1,12 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useContext } from 'react';
 import { MdDone, MdDelete } from 'react-icons/md';
 import { Container, Content, Subtitle } from './styles';
 
-interface TodoProps {
-  id: number;
-  name: string;
-  completed: boolean;
-}
+import TodosContext from '../../hooks/TodosContext';
 
-interface TodosProp {
-  todos: TodoProps[];
-  setTodos: React.Dispatch<React.SetStateAction<TodoProps[]>>;
-}
+const TodoList: React.FC = () => {
+  const { todos, setTodos } = useContext(TodosContext);
 
-const TodoList: React.FC<TodosProp> = ({ todos, setTodos }) => {
   const handleDone = useCallback(
     (id: number) => {
       const completedTodo = [...todos].map((todo) => {

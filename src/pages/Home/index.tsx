@@ -9,6 +9,8 @@ import Button from '../../components/Button';
 
 import ValidationErrors from '../../utils/ValidationErrors';
 
+import TodosContext from '../../hooks/TodosContext';
+
 import { Container } from './styles';
 
 interface TodoProps {
@@ -82,7 +84,9 @@ const Home: React.FC = () => {
         />
         <Button type="submit">Adicionar</Button>
 
-        <TodoList todos={todos} setTodos={setTodos} />
+        <TodosContext.Provider value={{ todos, setTodos }}>
+          <TodoList />
+        </TodosContext.Provider>
       </Form>
     </Container>
   );
