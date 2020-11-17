@@ -9,27 +9,14 @@ import Button from '../../components/Button';
 
 import ValidationErrors from '../../utils/ValidationErrors';
 
-import TodosContext from '../../hooks/TodosContext';
+import { useTodos } from '../../hooks/todos';
 
 import { Container } from './styles';
 
-interface TodoProps {
-  id: number;
-  name: string;
-  completed: boolean;
-}
-
 const Home: React.FC = () => {
+  const { addTodo } = useTodos();
+
   const [inputText, setInputText] = useState('');
-  const [todos, setTodos] = useState<TodoProps[]>(() => {
-    const todosStorage = localStorage.getItem('todos');
-
-    if (todosStorage) {
-      return JSON.parse(todosStorage);
-    }
-
-    return [];
-  });
 
   const formRef = useRef<FormHandles>(null);
 
@@ -44,18 +31,7 @@ const Home: React.FC = () => {
 
         await schema.validate(data, { abortEarly: false });
 
-        const todosUpdated = [
-          ...todos,
-          {
-            id: Math.random(),
-            name: data.todo,
-            completed: false,
-          },
-        ];
-
-        localStorage.setItem('todos', JSON.stringify(todosUpdated));
-
-        setTodos(todosUpdated);
+        addTodo({ id: Math.random(), name: data.todo, completed: false });
 
         setInputText('');
       } catch (err) {
@@ -64,7 +40,7 @@ const Home: React.FC = () => {
         formRef.current?.setErrors(errors);
       }
     },
-    [todos],
+    [addTodo],
   );
 
   const handleChange = useCallback((data) => {
@@ -84,9 +60,7 @@ const Home: React.FC = () => {
         />
         <Button type="submit">Adicionar</Button>
 
-        <TodosContext.Provider value={{ todos, setTodos }}>
-          <TodoList />
-        </TodosContext.Provider>
+        <TodoList />
       </Form>
     </Container>
   );
