@@ -7,7 +7,7 @@ import { useTodos } from '../../hooks/todos';
 const TodoList: React.FC = () => {
   const { todos, deleteTodo, doneTodo } = useTodos();
 
-  if (todos !== undefined && todos.length > 0) {
+  if (todos.length > 0) {
     return (
       <>
         <Subtitle>O que temos pra hoje?</Subtitle>
